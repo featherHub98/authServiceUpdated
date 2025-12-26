@@ -1,0 +1,101 @@
+const fs = require('fs').promises;
+const path = require('path');
+const pathDb = path.join(__dirname, '../db.json');
+
+const getAllAppRealms = async (req, res) => {
+    try {
+        let data = await fs.readFile(pathDb, 'utf-8');
+        if (!data) {
+            throw new Error('ENOENT: no such file or directory');
+        }
+        let db = JSON.parse(data).realms;
+        if (db.length === 0) {
+            return [];
+        } else if (!db) {
+            throw new AppRealmExeption("realms not found");
+        }
+
+        res.status(200).json(db);
+    } catch (err) {
+        if (err.code = 'ENOENT') {
+            res.status(500).json({ message: "could not reach DB" });
+        } else if (err instanceof AppRealmExeption) {
+            res.status(502).json({ message: "realms not found" });
+        }
+    }
+}
+
+const getAppRealmById = async (req, res, id) => {
+    try {
+        let data = await fs.readFile(pathDb, 'utf-8');
+        if (!data) {
+            throw new Error('ENOENT: no such file or directory');
+        }
+        let db = JSON.parse(data).realms;
+        if (db.length === 0) {
+            return [];
+        } else if (!db) {
+            throw new AppRealmExeption("realms not found");
+        }
+        const realm = db.find(realm => realm.id == id);
+        res.status(200).json(realm);
+    } catch (err) {
+        if (err.code = 'ENOENT') {
+            res.status(500).json({ message: "could not reach DB" });
+        } else if (err instanceof AppRealmExeption) {
+            res.status(502).json({ message: "realms not found" });
+        }
+    }
+}
+
+const addAppRealm = async (req, res, realm) => {
+    let data = await fs.readFile(pathDb, 'utf-8');
+    if (!data) {
+        res.status(500).json({ message: 'no such file or directory' });
+    }
+    let db = JSON.parse(data);
+    let realms = db.realms || [];
+    const newrealm = {
+        id: parseInt(db.realms[db.realms.length - 1].id) + 1,
+        name: realm.name,
+        description: realm.description
+    }
+    realms.push(newrealm);
+    db.realms = realms;
+    await fs.writeFile(pathDb, JSON.stringify(db, null, 2));
+    res.status(201).json({ message: 'realm created successfully' });
+}
+
+const updateAppRealm = async (req, res, realm) => {
+    let data = await fs.readFile(pathDb, 'utf-8');
+    if (!data) {
+        res.status(500).json({ message: 'no such file or directory' });
+    }
+
+    let db = JSON.parse(data);
+
+    const realmIndex = db.realms.findIndex(realm => realm.id == realm.id);
+    db.realms[realmIndex] = { ...db.realms[realmIndex], ...realm };
+
+    await fs.writeFile(pathDb, JSON.stringify(db, null, 2))
+    res.status(201).json({ message: 'realm updated successfully' });
+}
+
+const deleteAppRealm = async (req, res, id) => {
+    let data = await fs.readFile(pathDb, 'utf-8');
+    if (!data) {
+        res.status(500).json({ message: 'no such file or directory' });
+    }
+    
+    let db = JSON.parse(data);
+    
+    const realms = db.realms || [];
+    const filteredRealms = realms.filter(realm => realm.id != id);
+    db.realms = filteredRealms;
+
+    await fs.writeFile('db.json', JSON.stringify(db, null, 2))
+    res.status(201).json({ message: 'realm deleted successfully' });
+}
+
+module.exports = { getAllAppRealms, getAppRealmById, addAppRealm, deleteAppRealm, updateAppRealm };
+

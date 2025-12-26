@@ -27,41 +27,78 @@ const getAllUsers = async (req, res) => {
 }
 
 const getUserById = async (id) => {
-
+    try {
+        let data = await fs.readFile(pathDb, 'utf-8');
+        if (!data) {
+            throw new Error('ENOENT: no such file or directory');
+        }
+        let db = JSON.parse(data).authUsers;
+        if (db.length === 0) {
+            return [];
+        } else if (!db) {
+            throw new AuthUserExeption("users not found");
+        }
+        
+        res.status(200).json(db);
+    } catch (err) {
+        if (err.code = 'ENOENT') {
+            res.status(500).json({ message: "could not reach DB" });
+        } else if (err instanceof AuthUserExeption) {
+            res.status(502).json({ message: "users not found" });
+        }
+    }
 }
 
 const addUser = async (req, res, user) => {
     let data = await fs.readFile(pathDb, 'utf-8');
-    console.log('data : ',data)
     if (!data) {
         res.status(500).json({ message: 'no such file or directory' });
     }
-    let db = JSON.parse(data).authUsers;
-    let newId = db.length === 0 ? 1 : db.length + 1;
-    hashService.hashPassword(user.password)
-        .then(pwd => {
-            db.push({
-                id: newId,
-                email: user.email,
-                password: pwd,
-                username: user.username,
-                roles: user.roles
-            });
-
-            fs.writeFile(pathDb, JSON.stringify(db, null, 2));
-            res.status(201).json({ message: 'user created successfully' });
-        });
-    console.log("data  : ", hashedPassword)
-
-
+    let db = JSON.parse(data);
+    let authUsers = db.authUsers || [];
+    const hashedPassword = await hashService.hashPassword(user.password);
+    const newUser = {
+        id: parseInt(db.authUsers[db.authUsers.length - 1].id) + 1,
+        email: user.email,
+        password: hashedPassword,
+        username: user.username,
+        roles: user.roles
+    }
+    authUsers.push(newUser);
+    db.authUsers = authUsers;
+    await fs.writeFile(pathDb, JSON.stringify(db, null, 2));
+    res.status(201).json({ message: 'user created successfully' });
 }
 
-const updateUser = (id, user) => {
+const updateUser = async (req, res, id) => {
+    let data = await fs.readFile(pathDb, 'utf-8');
+    if (!data) {
+        res.status(500).json({ message: 'no such file or directory' });
+    }
 
+    let db = JSON.parse(data);
+
+    const userIndex = db.authUsers.findIndex(user => user.id == id);
+    db.authUsers[userIndex] = { ...db.authUsers[userIndex], ...req.body.user };
+
+    await fs.writeFile(pathDb, JSON.stringify(db, null, 2))
+    res.status(201).json({ message: 'user updated successfully' });
 }
 
-const deleteUser = (id) => {
+const deleteUser = async (req, res, id) => {
+    let data = await fs.readFile(pathDb, 'utf-8');
+    if (!data) {
+        res.status(500).json({ message: 'no such file or directory' });
+    }
+    
+    let db = JSON.parse(data);
+    
+    const users = db.authUsers || [];
+    const filteredUsers = users.filter(user => user.id != id);
+    db.authUsers = filteredUsers;
 
+    await fs.writeFile('db.json', JSON.stringify(db, null, 2))
+    res.status(201).json({ message: 'user deleted successfully' });
 }
 
 module.exports = { getAllUsers, getUserById, addUser, deleteUser, updateUser };

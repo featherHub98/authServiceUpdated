@@ -1,9 +1,29 @@
-[
-  {
-    "id": 1,
-    "email": "yassin@gmail.com",
-    "password": "$2b$10$XOrNr7r6/jXHT7P4Y.eLz.zMQsov8adejEUNdWIuVD/dDk/WPSZEa",
-    "username": "yassin",
-    "roles": "[admin,user]"
-  }
-]
+{
+  "authUsers": [
+    {
+      "id": 1,
+      "email": "yassin@gmail.com",
+      "password": "$2b$10$XOrNr7r6/jXHT7P4Y.eLz.zMQsov8adejEUNdWIuVD/dDk/WPSZEa",
+      "username": "yassin",
+      "roles": [
+        "admin",
+        "user"
+      ]
+    },
+    {
+      "id": 3,
+      "email": "yassitn@gmail.com",
+      "password": "$2b$10$grWxXZVKDwVgl8Q0X4gLSelPovpM3ktVjVDIZBsaCLvxgDMLcNiSS",
+      "username": "yassdn"
+    },
+    {
+      "id": 4,
+      "email": "yassn@gmail.com",
+      "password": "$2b$10$1LR.EXCsNJyP794KfRmQw.D1JE6fUodSwqoVpogT92YGlSBeED6H6",
+      "username": "yassdn"
+    }
+  ],
+  "realms": [],
+  "authRealms": [],
+  "secrets": []
+}
