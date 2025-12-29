@@ -1,6 +1,8 @@
 const jwt = require('jsonwebtoken')
-
- const verifyAccessToken = (token) => {
+const path = require('path');
+const fs = require('fs').promises;
+const pathDb = path.join(__dirname, '../db.json');
+ const verifyAccessToken = async(token) => {
      try {
          const decoded = jwt.verify(token, process.env['SECRET-ACCESS']);
             return decoded;
@@ -9,11 +11,79 @@ const jwt = require('jsonwebtoken')
         }
     };
 
-const verifyRefreshToken = (token) => {
-    try {
-        const decoded = jwt.verify(token, process.env['SECRET-REFRESH']);
-           return decoded;
+const verifyRefreshToken = async(token) => {
+   
+         try {
+        let data = await fs.readFile(pathDb, 'utf-8');
+         if (!data) {
+        throw new Error('ENOENT: no such file or directory');
+            }
+    let db = JSON.parse(data).realms;
+     let users = JSON.parse(data).authUsers;
+     let tokenUser = jwt.decode(token);
+     let user =Object.values(users).find(u=> u.email== tokenUser.email );
+    let realm = db.find(r => user.realmId === r.id);
+    let secrets = JSON.parse(data).secrets;
+    console.log("type of secrets ",);
+    let realmData = Object.values(secrets).find(s=> s.realmId== user.realmId  );
+        return jwt.verify(token,realmData.realmSecret); 
        } catch (err) {
            throw new Error('Invalid token');
        }
    };
+
+const generateRealmUserToken = async(user) => {
+    
+    let data = await fs.readFile(pathDb, 'utf-8');
+    if (!data) {
+        throw new Error('ENOENT: no such file or directory');
+    }
+    let db = JSON.parse(data).realms;
+    let realm = db.find(r => user.realmId === r.id);
+    let secrets = JSON.parse(data).secrets;
+    console.log("type of secrets ",);
+    let realmData = Object.values(secrets).find(s=> s.realmId== user.realmId  );  
+    const payload = {  
+        email: user.email,
+        username: user.username,
+        roles: user.roles,
+        realm: realm.name,
+        allowedRealms: user.allowedRealms,
+        allowedDomains: user.allowedDomains
+    }
+   
+    
+    const accessToken = jwt.sign(payload, realmData.realmSecret, { expiresIn: '10m', issuer: process.env.ISSUER });
+    const refreshToken = jwt.sign({email:user.email,username: user.username}, realmData.realmSecret, { expiresIn: '1d' });
+    console.log("generated tokens ",accessToken,refreshToken);
+    console.log("user found : ",user);
+    return { accessToken: accessToken, refreshToken: refreshToken };
+    
+}
+const generateTokenUsingRefreshToken = async (refreshToken) => {
+    
+    let isVerified = verifyRefreshToken(refreshToken);
+    if(!isVerified){
+        throw new Error('Invalid refresh token');
+    }
+  let data = await fs.readFile(pathDb, 'utf-8');
+         if (!data) {
+        throw new Error('ENOENT: no such file or directory');
+            }
+     let users = JSON.parse(data).authUsers;
+     let tokenUser = jwt.decode(refreshToken);
+     let user =Object.values(users).find(u=> u.email== tokenUser.email );
+     let newTokens = await generateRealmUserToken(user);
+     console.log("new tokens ",newTokens);
+     
+     return newTokens;
+     
+    
+}
+ 
+module.exports = {
+    verifyAccessToken,
+    verifyRefreshToken,
+    generateRealmUserToken,
+    generateTokenUsingRefreshToken
+}

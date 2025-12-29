@@ -3,8 +3,7 @@ const path = require('path');
 const pathDb = path.join(__dirname, '../db.json');
 const hashService = require('../services/hashPasswordService');
 const jwt = require('jsonwebtoken')
-let jwtSecret = process.env.JWT_SECRET;
-let refreshTokenSecret = process.env.REFRESH_TOKEN_SECRET;
+const jwtService = require('../services/jwtService');
 
 
 
@@ -155,23 +154,17 @@ const loginUser = async (req, res) => {
         }
         
         console.log("User found:", user.username);
-
-        const payload = { 
-            id: user.id, 
-            username: user.username 
-        };
         
-        const token = jwt.sign(payload, jwtSecret, { expiresIn: '15m' });
-        const refreshToken = jwt.sign({ id: user.id }, refreshTokenSecret, { expiresIn: '7d' });
-
+        
+        const token = await jwtService.generateRealmUserToken(user);
+        console.log("generated token", token);
+        
+        let response = {
+            token: token.accessToken,
+            refreshToken: token.refreshToken,
+        }
         return res.status(200).json({
-            message: 'Login successful',
-            token: token,
-            refreshToken: refreshToken,
-            user: {
-                id: user.id,
-                username: user.username
-            }
+            response
         });
         
     } catch (error) {

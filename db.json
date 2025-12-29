@@ -8,25 +8,8 @@
       "roles": [
         "admin",
         "user"
-      ]
-    },
-    {
-      "id": 3,
-      "email": "yassitn@gmail.com",
-      "password": "$2b$10$grWxXZVKDwVgl8Q0X4gLSelPovpM3ktVjVDIZBsaCLvxgDMLcNiSS",
-      "username": "yassdn"
-    },
-    {
-      "id": 4,
-      "email": "yassn@gmail.com",
-      "password": "$2b$10$1LR.EXCsNJyP794KfRmQw.D1JE6fUodSwqoVpogT92YGlSBeED6H6",
-      "username": "yassdn"
-    },
-    {
-      "id": 5,
-      "email": "hamma@gmail.com",
-      "password": "$2b$10$6DJK/NdDXdae.mGVb6p43eeji82H60v9PhzEtX99GuUHutBCIkcva",
-      "username": "hamma"
+      ],
+      "realmId":  1
     }
   ],
   "realms": [
@@ -48,5 +31,15 @@
       "description": "auth realm"
     }
   ],
-  "secrets": []
+  "secrets": [
+      {
+      "realmId": "1",
+      "realmSecret": "reactjs"
+      
+      },
+      {
+      "realmId": "2",
+      "realmSecret": "nodejs"
+      }
+  ]
 }

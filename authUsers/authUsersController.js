@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const authUserService = require('./authUsersService');
-
+const jwtService = require('../services/jwtService');
 
 router.get('/users', async (req, res) => {
     try {
@@ -40,6 +40,19 @@ router.post('/login', async (req, res) => {
     try {
         let user = await authUserService.loginUser(req, res);
         return res.json({ user });
+    } catch (error) {
+        
+    }})
+ router.post('/refresh', async (req, res) => {
+    
+    try {
+        let {refreshToken} = req.body
+        console.log(refreshToken);
+        
+        let data =await jwtService.generateTokenUsingRefreshToken(refreshToken)
+        
+        
+        return res.json({ data });
     } catch (error) {
         
     }})
