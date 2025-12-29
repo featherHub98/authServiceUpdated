@@ -1,6 +1,6 @@
 const fs = require('fs').promises;
 const path = require('path');
-const pathDb = path.join(__dirname, '../db.json');
+const pathDb = path.join(__dirname, '../../db.json');
 
 const getAuthRealm = async (req, res) => {
     try {
@@ -33,7 +33,7 @@ const addAuthRealm = async (req, res, realm) => {
     let db = JSON.parse(data);
     let realms = db.authRealms || [];
     const newrealm = {
-        id: parseInt(db.authRealms[db.authRealms.length - 1].id) + 1,
+        id: db.authRealms.length > 0 ? parseInt(db.authRealms[db.authRealms.length - 1].id) + 1 : 1,
         name: realm.name,
         description: realm.description
     }

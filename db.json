@@ -23,7 +23,24 @@
       "username": "yassdn"
     }
   ],
-  "realms": [],
-  "authRealms": [],
+  "realms": [
+    {
+      "id": 1,
+      "name": "react",
+      "description": "new realm"
+    },
+    {
+      "id": 2,
+      "name": "nodeJS",
+      "description": "second realm"
+    }
+  ],
+  "authRealms": [
+    {
+      "id": 1,
+      "name": "User managment",
+      "description": "auth realm"
+    }
+  ],
   "secrets": []
 }

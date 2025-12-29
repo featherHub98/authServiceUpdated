@@ -1,10 +1,12 @@
 const fs = require('fs').promises;
 const path = require('path');
-const pathDb = path.join(__dirname, '../db.json');
+const pathDb = path.join(__dirname, '../../db.json');
 
 const getAllAppRealms = async (req, res) => {
     try {
         let data = await fs.readFile(pathDb, 'utf-8');
+        console.log("the db file",data);
+        
         if (!data) {
             throw new Error('ENOENT: no such file or directory');
         }
@@ -56,7 +58,7 @@ const addAppRealm = async (req, res, realm) => {
     let db = JSON.parse(data);
     let realms = db.realms || [];
     const newrealm = {
-        id: parseInt(db.realms[db.realms.length - 1].id) + 1,
+        id: db.realms.length > 0 ? parseInt(db.realms[db.realms.length - 1].id) + 1 : 1,
         name: realm.name,
         description: realm.description
     }

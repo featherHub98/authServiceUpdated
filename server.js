@@ -10,7 +10,7 @@ app.use(cors());
 
 app.use("/auth",require('./authUsers/authUsersController'));
 app.use("/realms",require('./realms/appRealm/appRealmController'));
-app.use("/realms/auth",require('./realms/authRealm/authRealmController'));
+app.use("/realms/auth",require('./realms/authServiceRealm/authRealmController'));
 
 app.listen(PORT,()=>{
     console.log(`app running on http://localhost:${PORT}`);
