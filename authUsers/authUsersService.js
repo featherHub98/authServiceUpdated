@@ -2,6 +2,13 @@ const fs = require('fs').promises;
 const path = require('path');
 const pathDb = path.join(__dirname, '../db.json');
 const hashService = require('../services/hashPasswordService');
+const jwt = require('jsonwebtoken')
+let jwtSecret = process.env.JWT_SECRET;
+let refreshTokenSecret = process.env.REFRESH_TOKEN_SECRET;
+
+
+
+
 
 const getAllUsers = async (req, res) => {
     try {
@@ -100,6 +107,79 @@ const deleteUser = async (req, res, id) => {
     await fs.writeFile('db.json', JSON.stringify(db, null, 2))
     res.status(201).json({ message: 'user deleted successfully' });
 }
+const loginUser = async (req, res) => {
+    try {
+        const { username, password } = req.body;
+        
+        console.log("Login attempt:", username, password);
 
-module.exports = { getAllUsers, getUserById, addUser, deleteUser, updateUser };
+        if (!username || !password) {
+            return res.status(400).json({ 
+                error: 'Username and password are required' 
+            });
+        }
 
+        let data;
+        try {
+            data = await fs.readFile(pathDb, 'utf-8');
+        } catch (error) {
+            console.error('Database read error:', error);
+            return res.status(500).json({ 
+                error: 'Database error' 
+            });
+        }
+
+        let db;
+        try {
+            db = JSON.parse(data);
+        } catch (error) {
+            return res.status(500).json({ 
+                error: 'Database corrupted' 
+            });
+        }
+
+        const user = db.authUsers.find(user => user.username === username);
+        
+        if (!user) {
+            return res.status(401).json({ 
+                error: 'Invalid username or password' 
+            });
+        }
+
+        const isPasswordValid = hashService.comparePassword(password, user.password);
+        
+        if (!isPasswordValid) {
+            return res.status(401).json({ 
+                error: 'Invalid username or password' 
+            });
+        }
+        
+        console.log("User found:", user.username);
+
+        const payload = { 
+            id: user.id, 
+            username: user.username 
+        };
+        
+        const token = jwt.sign(payload, jwtSecret, { expiresIn: '15m' });
+        const refreshToken = jwt.sign({ id: user.id }, refreshTokenSecret, { expiresIn: '7d' });
+
+        return res.status(200).json({
+            message: 'Login successful',
+            token: token,
+            refreshToken: refreshToken,
+            user: {
+                id: user.id,
+                username: user.username
+            }
+        });
+        
+    } catch (error) {
+        console.error('Login error:', error);
+        return res.status(500).json({ 
+            error: 'Internal server error' 
+        });
+    }
+};
+
+module.exports = { getAllUsers, getUserById, addUser, deleteUser, updateUser, loginUser };
