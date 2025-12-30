@@ -9,7 +9,7 @@
         "admin",
         "user"
       ],
-      "realmId":  1
+      "realmId": 1
     }
   ],
   "realms": [
@@ -32,14 +32,18 @@
     }
   ],
   "secrets": [
-      {
-      "realmId": "1",
-      "realmSecret": "reactjs"
+    {
+      "realmId": 1,
+      "realmSecret": "this_is_an_updated_realm_secret"
       
-      },
-      {
-      "realmId": "2",
+    },
+    {
+      "realmId": 2,
       "realmSecret": "nodejs"
-      }
+    },
+    {
+      "realmId": 3,
+      "realmSecret": "this_is_a_new_realm_secret"
+    }
   ]
 }
