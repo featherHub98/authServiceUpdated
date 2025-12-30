@@ -27,10 +27,11 @@ const getRealmData = async(tokenUser,type) => {
     return {realmData,user};
 }
 
- const verifyAccessToken = async(token) => {
+ const verifyAccessToken = async(token,type) => {
      try {
+
         let tokenUser = jwt.decode(token);
-        let data = await getRealmData(tokenUser);
+        let data = await getRealmData(tokenUser,type);
          const decoded = jwt.verify(token,data.realmData.realmSecret);
             return decoded;
         } catch (err) {
@@ -72,7 +73,7 @@ const generateRealmUserToken = async(user) => {
    
     
     const accessToken = jwt.sign(payload, realmData.realmSecret, { expiresIn: '10m', issuer: process.env.ISSUER });
-    const refreshToken = jwt.sign({email:user.email,username: user.username,type:type}, realmData.realmSecret, { expiresIn: '1d' });
+    const refreshToken = jwt.sign({email:user.email,username: user.username}, realmData.realmSecret, { expiresIn: '1d' });
     console.log("generated tokens ",accessToken,refreshToken);
     console.log("user found : ",user);
     return { accessToken: accessToken, refreshToken: refreshToken };
