@@ -67,7 +67,7 @@ const addUser = async (req, res, user) => {
         id: parseInt(db.authUsers[db.authUsers.length - 1].id) + 1,
         email: user.email,
         password: hashedPassword,
-        username: user.username,
+        email: user.email,
         roles: user.roles
     }
     authUsers.push(newUser);
@@ -108,13 +108,13 @@ const deleteUser = async (req, res, id) => {
 }
 const loginUser = async (req, res) => {
     try {
-        const { username, password } = req.body;
+        const { email, password } = req.body;
         
-        console.log("Login attempt:", username, password);
+        console.log("Login attempt:", email, password);
 
-        if (!username || !password) {
+        if (!email || !password) {
             return res.status(400).json({ 
-                error: 'Username and password are required' 
+                error: 'email and password are required' 
             });
         }
 
@@ -137,11 +137,11 @@ const loginUser = async (req, res) => {
             });
         }
 
-        const user = db.authUsers.find(user => user.username === username);
+        const user = db.authUsers.find(user => user.email === email);
         
         if (!user) {
             return res.status(401).json({ 
-                error: 'Invalid username or password' 
+                error: 'Invalid email or password' 
             });
         }
 
@@ -149,11 +149,11 @@ const loginUser = async (req, res) => {
         
         if (!isPasswordValid) {
             return res.status(401).json({ 
-                error: 'Invalid username or password' 
+                error: 'Invalid email or password' 
             });
         }
         
-        console.log("User found:", user.username);
+        console.log("User found:", user.email);
         
         
         const token = await jwtService.generateRealmUserToken(user);
