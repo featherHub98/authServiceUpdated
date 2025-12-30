@@ -22,7 +22,7 @@ const getAllUsers = async (req, res) => {
             throw new AuthUserExeption("users not found");
         }
 
-        res.status(200).json(db);
+        return db;
     } catch (err) {
         if (err.code = 'ENOENT') {
             res.status(500).json({ message: "could not reach DB" });
@@ -32,7 +32,7 @@ const getAllUsers = async (req, res) => {
     }
 }
 
-const getUserById = async (id) => {
+const getUserById = async (req,res,id) => {
     try {
         let data = await fs.readFile(pathDb, 'utf-8');
         if (!data) {

@@ -2,22 +2,12 @@ const router = require('express').Router();
 const secretService = require('./secretService');
 
 
-router.get('/', async (req, res) => {
-    try {
-        let secrets = await secretService.getAllSecrets(req, res);
-        return res.json(secrets);
-    } catch (err) {
-        switch (err.status) {
-            case 500:
-            case 502: return res.status(500).json({ message: "could not reach DB" });   
-        }
-    }
-});
+
 
 router.get('/:id', async (req, res) => {
     try {
-        const id = req.params.id;
-        let secrets = await secretService.getSecretById(req, res, id);
+        const realmId = req.params.id;
+        let secrets = await secretService.getRealmSecretByRealmId(req, res, realmId);
         return res.json(secrets);
     } catch (err) {
         switch (err.status) {

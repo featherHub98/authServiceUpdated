@@ -27,6 +27,10 @@ app.use("/realms",require('./realms/appRealm/appRealmController'));
 app.use("/realms/auth",require('./realms/authServiceRealm/authRealmController'));
 app.use("/secrets",require('./realms/secrets/secretController'));
 app.use("/realms/users",require('./realms/realmUsers/realmUsersController'));
+
+
+
+
 app.use(methodOverride(function (req, res) {
   if (req.body && typeof req.body === 'object' && '_method' in req.body) {
    

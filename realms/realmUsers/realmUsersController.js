@@ -2,7 +2,7 @@ const router = require('express').Router();
 const authUserService = require('./realmUsersService');
 const jwtService = require('../../services/jwtService');
 
-router.get('/get', async (req, res) => {
+router.get('/', async (req, res) => {
     try {
         await authUserService.getAllUsers(req, res);
     } catch (err) {

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<nav class="main-nav">
+  <div class="nav-container">
+    <a href="/users" class="brand">Auth Users Admin</a>
+    <ul>
+      <li><a href="/users">Dashboard</a></li>
+      <li>
+        <form action="/api/logout" method="POST" class="inline-form">
+          <button type="submit" class="logout-link">Logout</button>
+        </form>
+      </li>
+    </ul>
+  </div>
+</nav>
+<div class="content-wrapper">
+  <h1>Auth Users</h1>
+
+  <table border="1" cellpadding="8" cellspacing="0" style="border-collapse: collapse;">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Username</th>
+        <th>Email</th>
+        <th>Roles</th>
+        <th>Realm ID</th>
+        <th><button id="create-btn" popovertarget="create-modal">Add User</button></th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each authUsers}}
+      <tr>
+        <td>{{id}}</td>
+        <td>{{username}}</td>
+        <td>{{email}}</td>
+        <td>{{roles}}</td>
+        <td>{{realmId}}</td>
+        <td>
+          <button class="update-btn" popovertarget="update-modal-{{id}}" 
+            data-id="{{id}}" data-username="{{username}}" data-email="{{email}}"
+            data-roles="{{roles}}" data-realmId="{{realmId}}">
+            Update
+          </button>
+        
+          <form action="/auth/users/delete" method="POST" class="inline-form">
+            <input type="hidden" name="_method" value="DELETE">
+            <input type="hidden" name="id" value="{{id}}">
+            <button type="submit" id="delete-btn"
+              onclick="return confirm('Are you sure you want to delete this user?')">
+              Delete
+            </button>
+          </form>
+        </td>
+      </tr>
+      
+      <div id="update-modal-{{id}}" popover>
+        <div style="padding: 20px; max-width: 500px;">
+          <h3>Update Auth User</h3>
+          <form action='/auth/users/update' method="POST">
+            <input type="hidden" name="_method" value="PUT">
+            <input type="hidden" id="updateId" name="id" value="{{id}}">
+
+            <div style="margin-bottom: 15px;">
+              <label style="display: block; margin-bottom: 5px; font-weight: 600;">Username:</label>
+              <input type="text" name="username" id="updateUsername" value="{{username}}" required
+                style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+            </div>
+
+            <div style="margin-bottom: 15px;">
+              <label style="display: block; margin-bottom: 5px; font-weight: 600;">Email:</label>
+              <input type="email" name="email" id="updateEmail" value="{{email}}" required
+                style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+            </div>
+
+            <div style="margin-bottom: 15px;">
+              <label style="display: block; margin-bottom: 5px; font-weight: 600;">Roles (comma-separated):</label>
+              <input type="text" name="roles" id="updateRoles" value="{{roles}}" required
+                style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+              <small>Example: admin,user</small>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+              <label style="display: block; margin-bottom: 5px; font-weight: 600;">Realm ID:</label>
+              <input type="number" name="realmId" id="updateRealmId" value="{{realmId}}" required
+                style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+            </div>
+
+            <div style="display: flex; gap: 10px; justify-content: flex-end;">
+              <button type="submit"
+                style="padding: 10px 20px; background: #FF4B2B; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                Save Changes
+              </button>
+              <button type="button" popovertarget="update-modal-{{id}}" popovertargetaction="hide"
+                style="padding: 10px 20px; background: #f0f0f0; border: 1px solid #ddd; border-radius: 4px; cursor: pointer;">
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+      {{/each}}
+    </tbody>
+  </table>
+
+  <div id="create-modal" popover>
+    <div style="padding: 20px; max-width: 500px;">
+      <h3>Create Auth User</h3>
+      <form action="/auth/users" method="POST" id="createUserForm">
+        <input type="hidden" name="_method" value="POST">
+
+        <div style="margin-bottom: 15px;">
+          <label style="display: block; margin-bottom: 5px; font-weight: 600;">Username:</label>
+          <input type="text" name="username" id="createUsername" required
+            style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+        </div>
+
+        <div style="margin-bottom: 15px;">
+          <label style="display: block; margin-bottom: 5px; font-weight: 600;">Email:</label>
+          <input type="email" name="email" id="createEmail" required
+            style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+        </div>
+
+        <div style="margin-bottom: 15px;">
+          <label style="display: block; margin-bottom: 5px; font-weight: 600;">Password:</label>
+          <input type="password" name="password" id="createPassword" required
+            style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+        </div>
+
+        <div style="margin-bottom: 15px;">
+          <label style="display: block; margin-bottom: 5px; font-weight: 600;">Roles (comma-separated):</label>
+          <input type="text" name="roles" id="createRoles" required
+            style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+          <small>Example: admin,user</small>
+        </div>
+
+        <div style="margin-bottom: 20px;">
+          <label style="display: block; margin-bottom: 5px; font-weight: 600;">Realm ID:</label>
+          <input type="number" name="realmId" id="createRealmId" required
+            style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+        </div>
+
+        <div style="display: flex; gap: 10px; justify-content: flex-end;">
+          <button type="submit"
+            style="padding: 10px 20px; background: #FF4B2B; color: white; border: none; border-radius: 4px; cursor: pointer;">
+            Create User
+          </button>
+          <button type="button" popovertarget="create-modal" popovertargetaction="hide"
+            style="padding: 10px 20px; background: #f0f0f0; border: 1px solid #ddd; border-radius: 4px; cursor: pointer;">
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+</body>
+</html>

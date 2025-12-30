@@ -1,5 +1,4 @@
 const jwt = require('jsonwebtoken');
-const { type } = require('os');
 const path = require('path');
 const fs = require('fs').promises;
 const pathDb = path.join(__dirname, '../db.json');
@@ -20,8 +19,6 @@ const getRealmData = async(tokenUser,type) => {
     }
     let user =Object.values(users).find(u=> u.email== tokenUser.email );
     console.log("the user ",user);
-    
-    let realm = db.find(r => user.realmId === r.id);
     let secrets = JSON.parse(data).secrets;
     let realmData = Object.values(secrets).find(s=> s.realmId== user.realmId  );
     return {realmData,user};
