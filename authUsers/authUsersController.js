@@ -38,6 +38,7 @@ router.delete('/users/:id', async (req, res) => {
 router.post('/login', async (req, res) => {
     
     try {
+         //let type = "authUser";
         let user = await authUserService.loginUser(req, res);
         return res.json({ user });
     } catch (error) {
@@ -48,8 +49,8 @@ router.post('/login', async (req, res) => {
     try {
         let {refreshToken} = req.body
         console.log(refreshToken);
-        
-        let data =await jwtService.generateTokenUsingRefreshToken(refreshToken)
+        let type = "authUser";
+        let data =await jwtService.generateTokenUsingRefreshToken(refreshToken,type)
         
         
         return res.json({ data });

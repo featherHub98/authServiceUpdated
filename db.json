@@ -49,17 +49,19 @@
     {
       "id": 1,
       "email": "mohamed1@gmail.com",
+      "username": "mohamed1",
       "password": "$2b$10$2cxqAQ1petQX.nvZB8gPt.YMNOMvZIj8wMQtx.wcSxTgHUMohjURq",
       "roles": [
         "user"
       ],
       "realmId": 1
+      
     },
     {
       "id": 2,
-      "email": "yassin@gmail.com",
-      "username": "yassin",
-      "password": "$2b$10$kALKEekm0cJf5qUtQK8kTOXp9MKsJyvxeAGGIRjqT46M2v0sPO/I6",
+      "email": "samy@gmail.com",
+      "username": "samy",
+      "password": "$2b$10$XN0BWlhq8VQ/LcCq5cy8JutjloWWc3dRtupkg4Y9HmrMfPqagyMqW",
       "roles": [
         "user"
       ],
