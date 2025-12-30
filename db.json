@@ -35,7 +35,6 @@
     {
       "realmId": 1,
       "realmSecret": "this_is_an_updated_realm_secret"
-      
     },
     {
       "realmId": 2,
@@ -44,6 +43,27 @@
     {
       "realmId": 3,
       "realmSecret": "this_is_a_new_realm_secret"
+    }
+  ],
+  "realmUsers": [
+    {
+      "id": 1,
+      "email": "mohamed1@gmail.com",
+      "password": "$2b$10$2cxqAQ1petQX.nvZB8gPt.YMNOMvZIj8wMQtx.wcSxTgHUMohjURq",
+      "roles": [
+        "user"
+      ],
+      "realmId": 1
+    },
+    {
+      "id": 2,
+      "email": "yassin@gmail.com",
+      "username": "yassin",
+      "password": "$2b$10$kALKEekm0cJf5qUtQK8kTOXp9MKsJyvxeAGGIRjqT46M2v0sPO/I6",
+      "roles": [
+        "user"
+      ],
+      "realmId": 2
     }
   ]
 }

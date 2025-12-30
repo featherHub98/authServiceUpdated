@@ -12,6 +12,8 @@ app.use("/auth",require('./authUsers/authUsersController'));
 app.use("/realms",require('./realms/appRealm/appRealmController'));
 app.use("/realms/auth",require('./realms/authServiceRealm/authRealmController'));
 app.use("/secrets",require('./realms/secrets/secretController'));
+app.use("/realms/users",require('./realms/realmUsers/realmUsersController'));
+
 app.listen(PORT,()=>{
     console.log(`app running on http://localhost:${PORT}`);
 })
