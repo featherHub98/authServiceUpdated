@@ -29,7 +29,9 @@ app.use(methodOverride(function (req, res) {
     return method;
   }
 }));
-
+app.get('/', (req, res) => {
+    res.redirect('/auth/users');
+});
 app.use("/auth",require('./authUsers/authUsersController'));
 app.use("/realms",require('./realms/appRealm/appRealmController'));
 app.use("/realms/auth",require('./realms/authServiceRealm/authRealmController'));
