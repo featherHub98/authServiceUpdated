@@ -174,9 +174,7 @@ const loginUser = async (req, res) => {
             token: token.accessToken,
             refreshToken: token.refreshToken,
         }
-        return res.status(200).json({
-            response
-        });
+        return response
         
     } catch (error) {
         console.error('Login error:', error);

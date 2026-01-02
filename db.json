@@ -8,27 +8,19 @@
       "roles": [
         "admin",
         "user"
-      ]
-    },
-    {
-      "id": "2",
-      "email": "yassin@gmail.com",
-      "password": "$2b$10$gKbM7VvoOkSDztPq6Ni3uuqlxFh69GGgNfLRzkrwNjzU2gm2wmFgW",
-      "username": "test2",
-      "roles": [
-        "admin"
-      ]
+      ],
+      "realmId": 1
     }
   ],
   "realms": [
     {
-      "id": 1,
-      "name": "react",
+      "id": "1",
+      "name": "realm 1",
       "description": "new realm"
     },
     {
-      "id": 2,
-      "name": "nodeJS",
+      "id": "2",
+      "name": "realm 2",
       "description": "second realm"
     }
   ],

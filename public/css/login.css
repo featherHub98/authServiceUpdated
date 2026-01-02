@@ -1,0 +1,58 @@
+/* Container to center everything on the screen */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f4f7f6;
+    margin: 0;
+}
+
+.login-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 350px; /* Keeps the form from getting too wide */
+}
+
+/* The magic for top-to-bottom layout */
+.vertical-form {
+    display: flex;
+    flex-direction: column; /* Stacks children vertically */
+    gap: 20px;             /* Adds space between each input group */
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column; /* Label on top of Input */
+    gap: 8px;
+}
+
+label {
+    font-weight: bold;
+    color: #333;
+}
+
+input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+button {
+    padding: 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}

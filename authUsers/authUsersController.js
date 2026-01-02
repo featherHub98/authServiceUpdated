@@ -41,13 +41,15 @@ router.delete('/users/:id', async (req, res) => {
     const id = req.params.id;
     await authUserService.deleteUser(req,res,id);
 });
-
+router.get('/login', (req, res) => {
+    res.render('login'); 
+});
 router.post('/login', async (req, res) => {
     
     try {
          //let type = "authUser";
         let user = await authUserService.loginUser(req, res);
-        return res.json({ user });
+        return res.redirect('/auth/users');
     } catch (error) {
         
     }})
