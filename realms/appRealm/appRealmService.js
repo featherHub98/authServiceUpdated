@@ -1,6 +1,7 @@
 const fs = require('fs').promises;
 const path = require('path');
 const pathDb = path.join(__dirname, '../../db.json');
+const AppRealmExeption = require('../../exeptions/AppRealmException');
 
 const getAllAppRealms = async (req, res) => {
     try {
@@ -17,7 +18,7 @@ const getAllAppRealms = async (req, res) => {
             throw new AppRealmExeption("realms not found");
         }
 
-        res.status(200).json(db);
+        return db;
     } catch (err) {
         if (err.code = 'ENOENT') {
             res.status(500).json({ message: "could not reach DB" });
@@ -53,7 +54,7 @@ const getAppRealmById = async (req, res, id) => {
 const addAppRealm = async (req, res, realm) => {
     let data = await fs.readFile(pathDb, 'utf-8');
     if (!data) {
-        res.status(500).json({ message: 'no such file or directory' });
+        throw new Error('no such file or directory');
     }
     let db = JSON.parse(data);
     let realms = db.realms || [];
@@ -65,28 +66,26 @@ const addAppRealm = async (req, res, realm) => {
     realms.push(newrealm);
     db.realms = realms;
     await fs.writeFile(pathDb, JSON.stringify(db, null, 2));
-    res.status(201).json({ message: 'realm created successfully' });
 }
 
 const updateAppRealm = async (req, res, realm) => {
     let data = await fs.readFile(pathDb, 'utf-8');
     if (!data) {
-        res.status(500).json({ message: 'no such file or directory' });
+        throw new Error('no such file or directory');
     }
 
     let db = JSON.parse(data);
 
-    const realmIndex = db.realms.findIndex(realm => realm.id == realm.id);
+    const realmIndex = db.realms.findIndex(r => r.id == realm.id);
     db.realms[realmIndex] = { ...db.realms[realmIndex], ...realm };
 
-    await fs.writeFile(pathDb, JSON.stringify(db, null, 2))
-    res.status(201).json({ message: 'realm updated successfully' });
+    await fs.writeFile(pathDb, JSON.stringify(db, null, 2));
 }
 
 const deleteAppRealm = async (req, res, id) => {
     let data = await fs.readFile(pathDb, 'utf-8');
     if (!data) {
-        res.status(500).json({ message: 'no such file or directory' });
+        throw new Error('no such file or directory');
     }
     
     let db = JSON.parse(data);
@@ -95,8 +94,7 @@ const deleteAppRealm = async (req, res, id) => {
     const filteredRealms = realms.filter(realm => realm.id != id);
     db.realms = filteredRealms;
 
-    await fs.writeFile('db.json', JSON.stringify(db, null, 2))
-    res.status(201).json({ message: 'realm deleted successfully' });
+    await fs.writeFile(pathDb, JSON.stringify(db, null, 2));
 }
 
 module.exports = { getAllAppRealms, getAppRealmById, addAppRealm, deleteAppRealm, updateAppRealm };

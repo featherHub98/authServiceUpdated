@@ -6,13 +6,17 @@ const methodOverride = require('method-override');
 const app = express();
 const PORT = 2000;
 
-
-
-
-app.engine('hbs', exphbs.engine({
+const hbs = exphbs.create({
   extname: '.hbs',
-  defaultLayout: false
-}));
+  defaultLayout: false,
+  helpers: {
+    eq: function(a, b) {
+      return a == b;
+    }
+  }
+});
+
+app.engine('hbs', hbs.engine);
 app.set('view engine', 'hbs');
 app.set('views', './views');
 

@@ -32,6 +32,24 @@ const getAllUsers = async (req, res) => {
     }
 }
 
+const getAllRealmUsers = async (req, res) => {
+    try {
+        let data = await fs.readFile(pathDb, 'utf-8');
+        if (!data) {
+            throw new Error('ENOENT: no such file or directory');
+        }
+        let db = JSON.parse(data).realmUsers;
+        
+        if (!db) {
+            return [];
+        }
+
+        return db;
+    } catch (err) {
+        return [];
+    }
+}
+
 const getUserById = async (req, res, id) => {
     try {
         let data = await fs.readFile(pathDb, 'utf-8');
@@ -178,4 +196,4 @@ const loginUser = async (req, res) => {
     }
 };
 
-module.exports = { getAllUsers, getUserById, addUser, deleteUser, updateUser, loginUser };
+module.exports = { getAllUsers, getAllRealmUsers, getUserById, addUser, deleteUser, updateUser, loginUser };
