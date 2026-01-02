@@ -21,6 +21,14 @@ app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
+app.use(methodOverride(function (req, res) {
+  if (req.body && typeof req.body === 'object' && '_method' in req.body) {
+   
+    var method = req.body._method;
+    delete req.body._method;
+    return method;
+  }
+}));
 
 app.use("/auth",require('./authUsers/authUsersController'));
 app.use("/realms",require('./realms/appRealm/appRealmController'));
@@ -31,14 +39,7 @@ app.use("/realms/users",require('./realms/realmUsers/realmUsersController'));
 
 
 
-app.use(methodOverride(function (req, res) {
-  if (req.body && typeof req.body === 'object' && '_method' in req.body) {
-   
-    var method = req.body._method;
-    delete req.body._method;
-    return method;
-  }
-}));
+
 
 app.listen(PORT,()=>{
     console.log(`app running on http://localhost:${PORT}`);

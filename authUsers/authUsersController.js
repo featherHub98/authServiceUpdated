@@ -19,7 +19,7 @@ router.get('/users', async (req, res) => {
 });
 
 router.get('/users/:id', async (req, res) => {
-const id = req.params.id;
+const id = parseInt(req.params.id);
     await authUserService.getUserById(req, res, id);
 
 });
@@ -35,21 +35,13 @@ router.put('/users/:id', async (req, res) => {
     const id = req.params.id;
     await authUserService.updateUser(req,res,id);
 });
-router.put('/users/update', async (req, res) => {
-    const id = req.body.id;
-    await authUserService.updateUser(req,res,id);
-});
+
 
 router.delete('/users/:id', async (req, res) => {
     const id = req.params.id;
     await authUserService.deleteUser(req,res,id);
 });
-router.delete('/users/delete', async (req, res) => {
-    const {id} = req.body;
-    console.log("delete id ", id);
-    
-    await authUserService.deleteUser(req,res,id);
-});
+
 router.post('/login', async (req, res) => {
     
     try {

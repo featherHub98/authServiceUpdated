@@ -67,13 +67,13 @@ const addUser = async (req, res, user) => {
         id: parseInt(db.authUsers[db.authUsers.length - 1].id) + 1,
         email: user.email,
         password: hashedPassword,
-        email: user.email,
+        username: user.username,
         roles: user.roles
     }
     authUsers.push(newUser);
     db.authUsers = authUsers;
     await fs.writeFile(pathDb, JSON.stringify(db, null, 2));
-    res.status(201).json({ message: 'user created successfully' });
+    res.status(201).redirect('/auth/users');
 }
 
 const updateUser = async (req, res, id) => {
@@ -83,12 +83,23 @@ const updateUser = async (req, res, id) => {
     }
 
     let db = JSON.parse(data);
-
-    const userIndex = db.authUsers.findIndex(user => user.id == id);
-    db.authUsers[userIndex] = { ...db.authUsers[userIndex], ...req.body.user };
+ const userIndex = db.authUsers.findIndex(user => user.id == id);
+        
+        if (userIndex === -1) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+          const updateData = { ...req.body };
+           if (typeof updateData.roles === 'string') {
+            updateData.roles = updateData.roles.split(',').map(role => role.trim());
+        }
+          
+     db.authUsers[userIndex] = { 
+            ...db.authUsers[userIndex], 
+            ...updateData 
+        };
 
     await fs.writeFile(pathDb, JSON.stringify(db, null, 2))
-    res.status(201).json({ message: 'user updated successfully' });
+    res.status(201).redirect('/auth/users');
 }
 
 const deleteUser = async (req, res, id) => {
@@ -104,7 +115,7 @@ const deleteUser = async (req, res, id) => {
     db.authUsers = filteredUsers;
 
     await fs.writeFile('db.json', JSON.stringify(db, null, 2))
-    res.status(201).json({ message: 'user deleted successfully' });
+    res.status(201).redirect('/auth/users');
 }
 const loginUser = async (req, res) => {
     try {

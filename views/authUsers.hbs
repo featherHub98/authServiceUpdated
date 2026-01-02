@@ -28,7 +28,7 @@
         <th>Username</th>
         <th>Email</th>
         <th>Roles</th>
-        <th>Realm ID</th>
+        
         <th><button id="create-btn" popovertarget="create-modal">Add User</button></th>
       </tr>
     </thead>
@@ -39,7 +39,6 @@
         <td>{{username}}</td>
         <td>{{email}}</td>
         <td>{{roles}}</td>
-        <td>{{realmId}}</td>
         <td>
           <button class="update-btn" popovertarget="update-modal-{{id}}" 
             data-id="{{id}}" data-username="{{username}}" data-email="{{email}}"
@@ -47,7 +46,7 @@
             Update
           </button>
         
-          <form action="/auth/users/delete" method="POST" class="inline-form">
+          <form action="/auth/users/{{id}}" method="POST" class="inline-form">
             <input type="hidden" name="_method" value="DELETE">
             <input type="hidden" name="id" value="{{id}}">
             <button type="submit" id="delete-btn"
@@ -61,7 +60,7 @@
       <div id="update-modal-{{id}}" popover>
         <div style="padding: 20px; max-width: 500px;">
           <h3>Update Auth User</h3>
-          <form action='/auth/users/update' method="POST">
+          <form action='/auth/users/{{id}}' method="POST">
             <input type="hidden" name="_method" value="PUT">
             <input type="hidden" id="updateId" name="id" value="{{id}}">
 
@@ -84,11 +83,7 @@
               <small>Example: admin,user</small>
             </div>
 
-            <div style="margin-bottom: 20px;">
-              <label style="display: block; margin-bottom: 5px; font-weight: 600;">Realm ID:</label>
-              <input type="number" name="realmId" id="updateRealmId" value="{{realmId}}" required
-                style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
-            </div>
+            
 
             <div style="display: flex; gap: 10px; justify-content: flex-end;">
               <button type="submit"
@@ -138,11 +133,7 @@
           <small>Example: admin,user</small>
         </div>
 
-        <div style="margin-bottom: 20px;">
-          <label style="display: block; margin-bottom: 5px; font-weight: 600;">Realm ID:</label>
-          <input type="number" name="realmId" id="createRealmId" required
-            style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
-        </div>
+        
 
         <div style="display: flex; gap: 10px; justify-content: flex-end;">
           <button type="submit"

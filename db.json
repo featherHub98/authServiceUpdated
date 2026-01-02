@@ -1,15 +1,23 @@
 {
   "authUsers": [
     {
-      "id": 1,
+      "id": "1",
       "email": "yassin@gmail.com",
       "password": "$2b$10$XOrNr7r6/jXHT7P4Y.eLz.zMQsov8adejEUNdWIuVD/dDk/WPSZEa",
       "username": "yassin",
       "roles": [
         "admin",
         "user"
-      ],
-      "realmId": 1
+      ]
+    },
+    {
+      "id": "2",
+      "email": "yassin@gmail.com",
+      "password": "$2b$10$gKbM7VvoOkSDztPq6Ni3uuqlxFh69GGgNfLRzkrwNjzU2gm2wmFgW",
+      "username": "test2",
+      "roles": [
+        "admin"
+      ]
     }
   ],
   "realms": [
