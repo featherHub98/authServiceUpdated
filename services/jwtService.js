@@ -59,14 +59,32 @@ const generateRealmUserToken = async(user) => {
     let realm = db.find(r => user.realmId === r.id);
     let secrets = JSON.parse(data).secrets;
     let realmData = Object.values(secrets).find(s=> s.realmId== user.realmId  );  
-    const payload = {  
-        email: user.email,
-        username: user.username,
-        roles: user.roles,
-        realm: realm.name,
-        allowedRealms: user.allowedRealms,
-        allowedDomains: user.allowedDomains
-    }
+   const payload = {};
+
+if (user && user.email) {
+    payload.email = user.email;
+}
+
+if (user && user.username) {
+    payload.username = user.username;
+}
+
+if (user && user.roles) {
+    payload.roles = user.roles;
+}
+
+if (user && user.allowedRealms) {
+    payload.allowedRealms = user.allowedRealms;
+}
+
+if (user && user.allowedDomains) {
+    payload.allowedDomains = user.allowedDomains;
+}
+
+
+if (realm && realm.name) {
+    payload.realm = realm.name;
+}
    
     
     const accessToken = jwt.sign(payload, realmData.realmSecret, { expiresIn: '10m', issuer: process.env.ISSUER });

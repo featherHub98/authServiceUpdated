@@ -118,7 +118,7 @@ const deleteUser = async (req, res, id) => {
     res.status(201).redirect('/auth/users');
 }
 const loginUser = async (req, res) => {
-    try {
+     try {
         const { email, password } = req.body;
         
         console.log("Login attempt:", email, password);
@@ -140,13 +140,15 @@ const loginUser = async (req, res) => {
         }
 
         let db;
-        try {
+        
+            try {
             db = JSON.parse(data);
         } catch (error) {
             return res.status(500).json({ 
                 error: 'Database corrupted' 
             });
         }
+        
 
         const user = db.authUsers.find(user => user.email === email);
         
