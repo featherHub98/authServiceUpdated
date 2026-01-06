@@ -62,7 +62,7 @@
       "username": "samy",
       "password": "$2b$10$XN0BWlhq8VQ/LcCq5cy8JutjloWWc3dRtupkg4Y9HmrMfPqagyMqW",
       "roles": [
-        "user"
+        "admin","supervisor"
       ],
       "realmId": 2
     }

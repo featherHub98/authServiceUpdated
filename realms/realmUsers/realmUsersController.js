@@ -55,5 +55,15 @@ router.post('/login', async (req, res) => {
     } catch (error) {
         
     }})
+    router.post('/verify',async (req,res)=>{
+        try {
+            let {accessToken} =req.body;
+            let type = "realmUser";
+            let isVerified = await jwtService.verifyAccessToken(accessToken,type)
+            return res.json({isVerified})
+        } catch (error) {
+            
+        }
+    })
 
 module.exports = router;
