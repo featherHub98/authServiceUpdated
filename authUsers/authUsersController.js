@@ -5,11 +5,11 @@ const jwtService = require('../services/jwtService');
 router.get('/users', async (req, res) => {
     try {
         let users = await authUserService.getAllUsers(req, res);
-        
-         return res.render('authUsers', { 
-            authUsers: users,
-            title: 'Auth Users Management'
-            });
+            return res.json({users})
+        //  return res.render('authUsers', { 
+        //     authUsers: users,
+        //     title: 'Auth Users Management'
+        //     });
     } catch (err) {
         switch (err.status) {
             case 500:

@@ -14,11 +14,11 @@ router.get('/dashboard', async (req, res) => {
                 users: realmUsers.filter(user => user.realmId == realm.id)
             };
         });
-        
-        return res.render('realms', { 
-            realms: realmsWithUsers,
-            title: 'Realms Management'
-        });
+        return res.json({realms:realmsWithUsers})
+        // return res.render('realms', { 
+        //     realms: realmsWithUsers,
+        //     title: 'Realms Management'
+        // });
     } catch (err) {
         switch (err.status) {
             case 500:
