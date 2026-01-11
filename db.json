@@ -66,6 +66,16 @@
         "supervisor"
       ],
       "realmId": 2
+    },
+    {
+      "id": 3,
+      "email": "hamma@gmail.com",
+      "username": "hamma",
+      "password": "$2b$10$3N0sV6oCGbXcQ3lr2RdIXu7uElPfBNe4rNNNqzgyKYQKBBTrNd4ry",
+      "roles": [
+        "user"
+      ],
+      "realmId": 1
     }
   ]
 }
