@@ -60,7 +60,7 @@
       "id": 2,
       "email": "samy@gmail.com",
       "username": "samy",
-      "password": "$2b$10$XN0BWlhq8VQ/LcCq5cy8JutjloWWc3dRtupkg4Y9HmrMfPqagyMqW",
+      "password": "$2b$10$GA0p3eOKGeospcKbAO.MN.vN2lEUQEXfmeTCzGskQPowPlrVfjXoG",
       "roles": [
         "admin",
         "supervisor"
